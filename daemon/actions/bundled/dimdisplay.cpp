@@ -18,6 +18,7 @@
  ***************************************************************************/
 
 #include "dimdisplay.h"
+#include "dimdisplayadaptor.h"
 
 #include <powerdevilbackendinterface.h>
 #include <powerdevil_debug.h>
@@ -27,12 +28,15 @@
 
 #include <KConfigGroup>
 #include <KLocalizedString>
+#include <KSharedConfig>
 
 namespace PowerDevil {
 namespace BundledActions {
 
 DimDisplay::DimDisplay(QObject* parent) : Action(parent)
 {
+    new DimDisplayAdaptor(this);
+
     setRequiredPolicies(PowerDevil::PolicyAgent::ChangeScreenSettings);
 }
 
@@ -113,6 +117,33 @@ bool DimDisplay::isSupported()
 
     return true;
 }
+
+int DimDisplay::batteryDimIdleTime() 
+{
+     KSharedConfigPtr profilesConfig = KSharedConfig::openConfig("powermanagementprofilesrc", KConfig::SimpleConfig);
+    // Let's start: AC profile before anything else
+    KConfigGroup batteryProfile(profilesConfig, "Battery");
+    KConfigGroup dimDisplay(&batteryProfile, "DimDisplay");
+    m_dimOnIdleTime = dimDisplay.readEntry< int >("idleTime", 300000);
+    return m_dimOnIdleTime / 1000;
+}
+
+void DimDisplay::setBatteryDimIdleTime(int seconds) 
+{
+     KSharedConfigPtr profilesConfig = KSharedConfig::openConfig("powermanagementprofilesrc", KConfig::SimpleConfig);
+    // Let's start: AC profile before anything else
+    KConfigGroup batteryProfile(profilesConfig, "Battery");
+    KConfigGroup dimDisplay(&batteryProfile, "DimDisplay");
+    m_dimOnIdleTime = seconds * 1000;
+    dimDisplay.writeEntry< int >("idleTime", m_dimOnIdleTime);
+    registerIdleTimeout(m_dimOnIdleTime * 3 / 4);
+    registerIdleTimeout(m_dimOnIdleTime / 2);
+    registerIdleTimeout(m_dimOnIdleTime);
+
+    profilesConfig->sync();
+}
+
+
 
 bool DimDisplay::loadAction(const KConfigGroup& config)
 {

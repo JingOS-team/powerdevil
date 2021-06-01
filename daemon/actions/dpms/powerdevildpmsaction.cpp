@@ -43,12 +43,15 @@
 #include <KPluginFactory>
 #include <KSharedConfig>
 
+#include "dpmsadaptor.h"
+
 K_PLUGIN_FACTORY(PowerDevilDPMSActionFactory, registerPlugin<PowerDevilDPMSAction>(); )
 
 PowerDevilDPMSAction::PowerDevilDPMSAction(QObject* parent, const QVariantList &args)
     : Action(parent)
     , m_helper()
 {
+    new DPMSAdaptor(this);
     setRequiredPolicies(PowerDevil::PolicyAgent::ChangeScreenSettings);
 
     if (QX11Info::isPlatformX11()) {
@@ -187,9 +190,33 @@ bool PowerDevilDPMSAction::loadAction(const KConfigGroup& config)
         registerIdleTimeout(m_idleTime * 1000);
         registerIdleTimeout(m_idleTime * 1000 - 5000); // start screen fade a bit earlier to alert user
     }
-    m_lockBeforeTurnOff = config.readEntry<bool>("lockBeforeTurnOff", false);
+    m_lockBeforeTurnOff = config.readEntry<bool>("lockBeforeTurnOff", true);
 
     return true;
+}
+
+int PowerDevilDPMSAction::DPMSIdleTime() 
+{
+    return m_idleTime;
+}
+
+void PowerDevilDPMSAction::setDPMSIdleTime(int seconds) 
+{
+    m_idleTime = seconds;
+    KSharedConfigPtr profilesConfig = KSharedConfig::openConfig("powermanagementprofilesrc", KConfig::SimpleConfig);
+    // Let's start: AC profile before anything else
+    KConfigGroup batteryProfile(profilesConfig, "Battery");
+    KConfigGroup dpmsControl(&batteryProfile, "DPMSControl");
+    dpmsControl.writeEntry< uint >("idleTime", m_idleTime);
+    dpmsControl.writeEntry< uint >("lockBeforeTurnOff", true);
+    m_lockBeforeTurnOff = true;
+    
+    if (m_idleTime > 0) {
+        registerIdleTimeout(m_idleTime * 1000);
+        registerIdleTimeout(m_idleTime * 1000 - 5000); // start screen fade a bit earlier to alert user
+    }
+    
+    profilesConfig->sync();
 }
 
 bool PowerDevilDPMSAction::onUnloadAction()

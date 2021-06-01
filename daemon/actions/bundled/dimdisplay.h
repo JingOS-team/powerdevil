@@ -31,6 +31,7 @@ class DimDisplay : public PowerDevil::Action
 {
     Q_OBJECT
     Q_DISABLE_COPY(DimDisplay)
+    Q_CLASSINFO("D-Bus Interface", "org.kde.Solid.PowerManagement.Actions.DimDisplay")
 
 public:
     explicit DimDisplay(QObject *parent);
@@ -47,6 +48,9 @@ protected:
 public:
     bool loadAction(const KConfigGroup& config) override;
 
+public Q_SLOTS:
+    int batteryDimIdleTime();
+    void setBatteryDimIdleTime(int seconds);
 private:
     void setBrightnessHelper(int screen, int keyboard, bool force = false);
 

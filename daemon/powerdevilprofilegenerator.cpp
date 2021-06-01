@@ -26,6 +26,7 @@
 
 #include <KConfigGroup>
 #include <KSharedConfig>
+#include <limits.h>
 
 namespace PowerDevil {
 
@@ -63,7 +64,8 @@ void ProfileGenerator::generateProfiles(bool toRam, bool toDisk)
     // We want to dim the screen after a while, definitely
     {
         KConfigGroup dimDisplay(&acProfile, "DimDisplay");
-        dimDisplay.writeEntry< int >("idleTime", 300000);
+        // dimDisplay.writeEntry< int >("idleTime", 300000);
+        dimDisplay.writeEntry< int >("idleTime", INT_MAX);
     }
 
     auto initLid = [toRam, mobile](KConfigGroup &profile)
@@ -86,7 +88,8 @@ void ProfileGenerator::generateProfiles(bool toRam, bool toDisk)
     // And we also want to turn off the screen after another while
     {
         // on mobile, 1 minute, on desktop 10 minutes
-        auto timeout = mobile ? 60 : 600;
+        // auto timeout = mobile ? 60 : 600;
+        auto timeout = mobile ? INT_MAX / 2 : INT_MAX;
         KConfigGroup dpmsControl(&acProfile, "DPMSControl");
         dpmsControl.writeEntry< uint >("idleTime", timeout);
         dpmsControl.writeEntry< uint >("lockBeforeTurnOff", mobile);
@@ -99,7 +102,8 @@ void ProfileGenerator::generateProfiles(bool toRam, bool toDisk)
     {
         // on mobile 30 seconds, on desktop 2 minutes
         // config is in the miliseconds
-        auto timeout = mobile ? 30000 : 120000;
+        // auto timeout = mobile ? 30000 : 120000;
+        auto timeout = mobile ? INT_MAX / 2 : INT_MAX;
         KConfigGroup dimDisplay(&batteryProfile, "DimDisplay");
         dimDisplay.writeEntry< int >("idleTime", timeout);
     }
@@ -109,7 +113,8 @@ void ProfileGenerator::generateProfiles(bool toRam, bool toDisk)
     // We want to turn off the screen after another while
     {
         // on mobile, 1 minute, on laptop 5 minutes
-        auto timeout = mobile ? 60 : 300;
+        // auto timeout = mobile ? 60 : 300;
+        auto timeout = mobile ? 120 : 300;
         KConfigGroup dpmsControl(&batteryProfile, "DPMSControl");
         dpmsControl.writeEntry< uint >("idleTime", timeout);
         dpmsControl.writeEntry< uint >("lockBeforeTurnOff", mobile);
@@ -147,7 +152,8 @@ void ProfileGenerator::generateProfiles(bool toRam, bool toDisk)
     // We want to turn off the screen after another while
     {
         // on mobile, half minute, on laptop 2 minutes
-        auto timeout = mobile ? 30 : 120;
+        // auto timeout = mobile ? 30 : 120;
+        auto timeout = mobile ? 120 : 120;
         KConfigGroup dpmsControl(&lowBatteryProfile, "DPMSControl");
         dpmsControl.writeEntry< uint >("idleTime", timeout);
         dpmsControl.writeEntry< uint >("lockBeforeTurnOff", mobile);

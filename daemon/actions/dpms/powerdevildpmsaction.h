@@ -31,6 +31,7 @@ class AbstractDpmsHelper;
 class PowerDevilDPMSAction : public PowerDevil::Action
 {
     Q_OBJECT
+    Q_CLASSINFO("D-Bus Interface", "org.kde.Solid.PowerManagement.Actions.DPMS")
     Q_DISABLE_COPY(PowerDevilDPMSAction)
 
 public:
@@ -48,6 +49,10 @@ protected:
 
 public:
     bool loadAction(const KConfigGroup &config) override;
+
+public Q_SLOTS:
+    int DPMSIdleTime();
+    void setDPMSIdleTime(int seconds);
 
 private Q_SLOTS:
     void onUnavailablePoliciesChanged(PowerDevil::PolicyAgent::RequiredPolicies policies);

@@ -63,10 +63,7 @@ void BacklightHelper::init()
 
     m_anim.setEasingCurve(QEasingCurve::InOutQuad);
     connect(&m_anim, &QVariantAnimation::valueChanged, this, [this](const QVariant &value) {
-        // When animating to zero, it emits a value change to 0 before starting the animation...
-        if (m_anim.state() == QAbstractAnimation::Running) {
-            writeBrightness(value.toInt());
-        }
+        writeBrightness(value.toInt());
     });
 
     m_isSupported = true;

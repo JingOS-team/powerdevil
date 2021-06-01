@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 3.0)
 
 project(PowerDevil)
-set(PROJECT_VERSION "5.21.80")
+set(PROJECT_VERSION "5.20.2")
 set(PROJECT_VERSION_MAJOR 5)
 
 set(QT_MIN_VERSION "5.15.0")
-set(KF5_MIN_VERSION "5.78")
+set(KF5_MIN_VERSION "5.74")
 
 find_package(ECM ${KF5_MIN_VERSION} REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH}  ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
@@ -81,19 +81,11 @@ include_directories (
 add_definitions(-DQT_NO_KEYWORDS)
 add_definitions(-DQT_NO_FOREACH)
 
-ecm_setup_version(${PROJECT_VERSION} VARIABLE_PREFIX POWERDEVIL
-                  VERSION_HEADER "${CMAKE_BINARY_DIR}/powerdevil_version.h"
-)
-
 add_subdirectory(daemon)
 add_subdirectory(kcmodule)
 add_subdirectory(doc)
 
-ecm_qt_install_logging_categories(
-        EXPORT POWERDEVIL
-        FILE powerdevil.categories
-        DESTINATION ${KDE_INSTALL_LOGGINGCATEGORIESDIR}
-        )
+install( FILES powerdevil.categories  DESTINATION  ${KDE_INSTALL_LOGGINGCATEGORIESDIR})
 install( FILES powerdevil.notifyrc DESTINATION ${KDE_INSTALL_KNOTIFY5RCDIR} )
 
 # add clang-format target for all our real source files
@@ -101,3 +93,6 @@ file(GLOB_RECURSE ALL_CLANG_FORMAT_SOURCE_FILES *.cpp *.h)
 kde_clang_format(${ALL_CLANG_FORMAT_SOURCE_FILES})
 
 feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
+
+find_package(KF5I18n CONFIG REQUIRED)
+ki18n_install(po)

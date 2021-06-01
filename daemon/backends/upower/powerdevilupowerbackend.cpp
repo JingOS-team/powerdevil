@@ -433,6 +433,9 @@ int PowerDevilUPowerBackend::brightnessMax(PowerDevil::BackendInterface::Brightn
 
 void PowerDevilUPowerBackend::setBrightness(int value, PowerDevil::BackendInterface::BrightnessControlType type)
 {
+    if(value<8){
+        value=8;
+    }
     if (type == Screen) {
         qCDebug(POWERDEVIL) << "set screen brightness value: " << value;
         if (m_ddcBrightnessControl->isSupported()) {
