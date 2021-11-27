@@ -149,6 +149,11 @@ void PowerDevilApp::onCoreReady()
 
 int main(int argc, char **argv)
 {
+#if defined (__arm64__) || defined (__aarch64__)
+    qDebug()<<"rg_kde_powerdevil on the arm by repowerd instead";
+    return 0;
+#endif
+
     QGuiApplication::setDesktopSettingsAware(false);
     QGuiApplication::setAttribute(Qt::AA_DisableSessionManager);
     KWorkSpace::detectPlatform(argc, argv);

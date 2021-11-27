@@ -1,0 +1,8 @@
+etc/xdg/autostart/powerdevil.desktop
+usr/lib/*/libexec
+usr/lib/*/libpowerdevilconfigcommonprivate.so.*
+usr/lib/*/qt5
+#usr/share/*
+#usr/lib/systemd/user/
+usr/share/dbus-1
+usr/share/polkit-1/

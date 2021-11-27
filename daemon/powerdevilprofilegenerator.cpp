@@ -74,6 +74,7 @@ void ProfileGenerator::generateProfiles(bool toRam, bool toDisk)
 
         KConfigGroup handleButtonEvents(&profile, "HandleButtonEvents");
         handleButtonEvents.writeEntry< uint >("powerButtonAction", defaultPowerButtonAction);
+        //handleButtonEvents.writeEntry< uint >("powerDownAction", LockScreenMode);
         handleButtonEvents.writeEntry< uint >("powerDownAction", LogoutDialogMode);
         if (toRam) {
             handleButtonEvents.writeEntry< uint >("lidAction", ToRamMode);
@@ -102,8 +103,8 @@ void ProfileGenerator::generateProfiles(bool toRam, bool toDisk)
     {
         // on mobile 30 seconds, on desktop 2 minutes
         // config is in the miliseconds
-        // auto timeout = mobile ? 30000 : 120000;
-        auto timeout = mobile ? INT_MAX / 2 : INT_MAX;
+        auto timeout = 120000;
+        //auto timeout = mobile ? INT_MAX / 2 : INT_MAX;
         KConfigGroup dimDisplay(&batteryProfile, "DimDisplay");
         dimDisplay.writeEntry< int >("idleTime", timeout);
     }

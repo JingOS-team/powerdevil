@@ -27,6 +27,7 @@
 #include <powerdevil_debug.h>
 
 #include <QAction>
+#include <QTime>
 
 #include <KActionCollection>
 #include <KConfigGroup>
@@ -69,6 +70,9 @@ HandleButtonEvents::HandleButtonEvents(QObject *parent)
     accel->setGlobalShortcut(globalAction, Qt::Key_Hibernate);
     connect(globalAction, SIGNAL(triggered(bool)), SLOT(suspendToDisk()));
 
+    //[liubangguo]cancel shortcut in arm pad
+#if defined (__arm64__) || defined (__aarch64__)
+#else
     globalAction = actionCollection->addAction("PowerOff");
     globalAction->setText(i18nc("@action:inmenu Global shortcut", "Power Off"));
     if (!mobile) {
@@ -80,6 +84,7 @@ HandleButtonEvents::HandleButtonEvents(QObject *parent)
     globalAction->setText(i18nc("@action:inmenu Global shortcut, used for long presses of the power button", "Power Down"));
     accel->setGlobalShortcut(globalAction, Qt::Key_PowerDown);
     connect(globalAction, &QAction::triggered, this, &HandleButtonEvents::powerDownButtonTriggered);
+#endif
 
     connect(new KScreen::GetConfigOperation(KScreen::GetConfigOperation::NoEDID), &KScreen::ConfigOperation::finished,
             this, [this](KScreen::ConfigOperation *op) {

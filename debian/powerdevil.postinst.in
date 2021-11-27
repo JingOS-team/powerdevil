@@ -1,0 +1,19 @@
+#!/bin/sh
+
+set -e
+
+if [ "$1" = configure ]; then
+    # Set the capabilities
+    if command -v setcap > /dev/null && \
+       setcap "CAP_SYS_RESOURCE=+ep" \
+            "/usr/lib/#DEB_HOST_MULTIARCH#/libexec/org_kde_powerdevil"; then
+        echo "Sucessfully set capabilities for start_kdeinit"
+    else
+        echo "Failed to set capabilities for start_kdeinit" >&2
+    fi
+fi
+
+#DEBHELPER#
+
+exit 0
+

@@ -1,0 +1,6 @@
+usr/share/doc/HTML/*/kcontrol/powerdevil/
+usr/share/knotifications5
+usr/share/kservices5
+usr/share/kservicetypes5
+#usr/share/locale/*
+#usr/share/qlogging-categories5/powerdevil.categories

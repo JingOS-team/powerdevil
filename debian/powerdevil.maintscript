@@ -1,0 +1,2 @@
+rm_conffile /etc/dbus-1/system.d/org.kde.powerdevil.backlighthelper.conf
+rm_conffile /etc/dbus-1/system.d/org.kde.powerdevil.discretegpuhelper.conf

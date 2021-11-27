@@ -50,15 +50,17 @@ BrightnessControl::BrightnessControl(QObject* parent)
     KActionCollection* actionCollection = new KActionCollection( this );
     actionCollection->setComponentDisplayName(i18nc("Name for powerdevil shortcuts category", "Power Management"));
 
-    QAction* globalAction = actionCollection->addAction(QLatin1String("Increase Screen Brightness"));
-    globalAction->setText(i18nc("@action:inmenu Global shortcut", "Increase Screen Brightness"));
-    KGlobalAccel::setGlobalShortcut(globalAction, Qt::Key_MonBrightnessUp);
-    connect(globalAction, SIGNAL(triggered(bool)), SLOT(increaseBrightness()));
+#if !defined (__arm64__) && !defined (__aarch64__)
+        QAction* globalAction = actionCollection->addAction(QLatin1String("Increase Screen Brightness"));
+        globalAction->setText(i18nc("@action:inmenu Global shortcut", "Increase Screen Brightness"));
+        KGlobalAccel::setGlobalShortcut(globalAction, Qt::Key_MonBrightnessUp);
+        connect(globalAction, SIGNAL(triggered(bool)), SLOT(increaseBrightness()));
 
-    globalAction = actionCollection->addAction(QLatin1String("Decrease Screen Brightness"));
-    globalAction->setText(i18nc("@action:inmenu Global shortcut", "Decrease Screen Brightness"));
-    KGlobalAccel::setGlobalShortcut(globalAction, Qt::Key_MonBrightnessDown);
-    connect(globalAction, SIGNAL(triggered(bool)), SLOT(decreaseBrightness()));
+        globalAction = actionCollection->addAction(QLatin1String("Decrease Screen Brightness"));
+        globalAction->setText(i18nc("@action:inmenu Global shortcut", "Decrease Screen Brightness"));
+        KGlobalAccel::setGlobalShortcut(globalAction, Qt::Key_MonBrightnessDown);
+        connect(globalAction, SIGNAL(triggered(bool)), SLOT(decreaseBrightness()));
+#endif
 }
 
 void BrightnessControl::onProfileUnload()

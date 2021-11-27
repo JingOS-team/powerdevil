@@ -40,13 +40,14 @@ FdoConnector::FdoConnector(PowerDevil::Core *parent)
     new PowerManagementInhibitAdaptor(this);
 
     QDBusConnection c = QDBusConnection::sessionBus();
-
+#if defined (__arm64__) || defined (__aarch64__)
+     qDebug()<<__FILE__<<__LINE__<< "The arm by repowerd management power, registration in powerbackend.";
+#else
     c.registerService("org.freedesktop.PowerManagement");
     c.registerObject("/org/freedesktop/PowerManagement", this);
-
     c.registerService("org.freedesktop.PowerManagement.Inhibit");
     c.registerObject("/org/freedesktop/PowerManagement/Inhibit", this);
-
+#endif
     connect(m_core->backend(), SIGNAL(acAdapterStateChanged(PowerDevil::BackendInterface::AcAdapterState)),
             this, SLOT(onAcAdapterStateChanged(PowerDevil::BackendInterface::AcAdapterState)));
     connect(PolicyAgent::instance(), SIGNAL(unavailablePoliciesChanged(PowerDevil::PolicyAgent::RequiredPolicies)),

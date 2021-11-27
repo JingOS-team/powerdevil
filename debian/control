@@ -1,0 +1,100 @@
+Source: powerdevil
+Section: kde
+Priority: optional
+Maintainer: Debian/Kubuntu Qt/KDE Maintainers <debian-qt-kde@lists.debian.org>
+Uploaders: Maximiliano Curia <maxy@debian.org>
+Build-Depends: cmake (>= 3.0~),
+               debhelper (>= 11~),
+               extra-cmake-modules (>= 5.50.0~),
+               kinit-dev,
+               kuserfeedback-dev,
+               libcap-dev,
+               libkf5activities-dev (>= 5.50.0~),
+               libkf5auth-dev (>= 5.50.0~),
+               libkf5bluezqt-dev (>= 5.50.0~),
+               libkf5config-dev (>= 5.50.0~),
+               libkf5crash-dev (>= 5.50.0~),
+               libkf5dbusaddons-dev (>= 5.50.0~),
+               libkf5doctools-dev (>= 5.50.0~),
+               libkf5globalaccel-dev (>= 5.50.0~),
+               libkf5i18n-dev (>= 5.50.0~),
+               libkf5idletime-dev (>= 5.50.0~),
+               libkf5kdelibs4support-dev (>= 5.2.0),
+               libkf5kio-dev (>= 5.50.0~),
+               libkf5networkmanagerqt-dev (>= 5.50.0~),
+               libkf5notifications-dev (>= 5.50.0~),
+               libkf5notifyconfig-dev (>= 5.50.0~),
+               libkf5screen-dev (>= 4:5.6),
+               libkf5solid-dev (>= 5.50.0~),
+               libkf5wayland-dev (>= 4:5.50.0~),
+               libqt5x11extras5-dev (>= 5.11.0~),
+               libudev-dev,
+               libx11-dev,
+               libx11-xcb-dev,
+               libxcb-composite0-dev,
+               libxcb-damage0-dev,
+               libxcb-dpms0-dev,
+               libxcb-icccm4-dev,
+               libxcb-image0-dev,
+               libxcb-keysyms1-dev,
+               libxcb-randr0-dev,
+               libxcb1-dev,
+               libxrandr-dev,
+               pkg-config,
+               pkg-kde-tools (>= 0.15.18~),
+               plasma-workspace-dev (>= 4:5.14.5~),
+               qtbase5-dev (>= 5.11.0~)
+Standards-Version: 4.1.4
+Homepage: https://projects.kde.org/projects/kde/workspace/powerdevil
+Vcs-Browser: https://salsa.debian.org/qt-kde-team/kde/powerdevil
+Vcs-Git: https://salsa.debian.org/qt-kde-team/kde/powerdevil.git
+
+Package: libpowerdevilcore2
+Section: libs
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Conflicts: libpowerdevilcore1
+Replaces: libpowerdevilcore1
+Description: Global power saver settings ui library.
+ Power Devil allows you to define your all power settings.
+ .
+ This package contains the library files.
+
+Package: libpowerdevilui5
+Section: libs
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: Global power saver settings ui library.
+ Power Devil allows you to define your all power settings.
+ .
+ This package contains the library files.
+
+Package: powerdevil
+Architecture: any
+Depends: powerdevil-data (= ${source:Version}),
+         ${misc:Depends},
+         ${shlibs:Depends}
+Breaks: kde-workspace-data (<< 4:4.98.0)
+Replaces: kde-workspace-data (<< 4:4.98.0)
+Description: Global power saver settings.
+ Power Devil allows you to define your all power settings.
+
+Package: powerdevil-data
+Architecture: all
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Breaks: ${kde-l10n:all}
+Replaces: ${kde-l10n:all}
+Description: Global power saver settings data files.
+ Power Devil allows you to define your all power settings.
+
+Package: powerdevil-dev
+Section: devel
+Architecture: any
+Depends: libpowerdevilcore2 (= ${binary:Version}),
+         libpowerdevilui5 (= ${binary:Version}),
+         powerdevil (= ${binary:Version}),
+         ${misc:Depends}
+Description: Global power saver settings.
+ Power Devil allows you to define your all power settings.
+ .
+ This package contains the development files.
